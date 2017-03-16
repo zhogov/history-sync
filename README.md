@@ -26,7 +26,7 @@ history-sync uses Git to push/pull your zsh_history to/from a remote repository.
    Your default message when pushing to *$ZSH_HISTORY_PROJ*
 4. Ensure your GPG setup is complete and you have a public/private key pair for encrypting/decrypting: `man gpg`
 5. Run `zhpl` to pull
-6. Run `zhps -r 876T3F78 -r 998A637B -r ...` to encrypt and push
+6. Run `zhps` to encrypt and push
 7. Run `zhsync` to pull/push
 
 ## Example use

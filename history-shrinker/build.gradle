@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'groovy'
+}
+
+group 'ord.example'
+version '1.0-SNAPSHOT'
+
+jar {
+    baseName = 'history-shrinker'
+    version = "$version"
+}
+
+test {
+    useTestNG {
+    }
+    outputs.upToDateWhen { false }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    
+    testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
+    testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.7'
+}

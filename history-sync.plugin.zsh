@@ -45,7 +45,7 @@ function history_sync_pull() {
     fi
 
     # Decrypt
-    gpg --output zsh_history_decrypted --decrypt zsh_history
+    gpg --yes --output zsh_history_decrypted --decrypt zsh_history
     if [[ $? != 0 ]]; then
         print_gpg_decrypt_error_msg
         cd $DIR
@@ -53,15 +53,17 @@ function history_sync_pull() {
     fi
 
     # Merge
-    cat $HOME/.zsh_history zsh_history_decrypted | sort -u > $HOME/.zsh_history 
+    cat zsh_history_decrypted >> $HOME/.zsh_history
     rm zsh_history_decrypted
+    cd $ZSH_CUSTOM/plugins/history-sync/history-shrinker
+    ./gradlew test
     cd $DIR
 }
 
 # Encrypt and push current history to master
 function history_sync_push() {
     # Get option recipients
-    local recipients=()
+    local recipients="schogow@gmail.com"
     while getopts -r: opt; do
         case "$opt" in
             r)
@@ -83,7 +85,7 @@ function history_sync_push() {
         recipients+=$name
     fi
 
-    ENCRYPT_CMD="gpg -v "
+    ENCRYPT_CMD="gpg --yes -v "
     for r in $recipients; do
         ENCRYPT_CMD+="-r \"$r\" "
     done
@@ -96,41 +98,23 @@ function history_sync_push() {
             return
         fi
 
-        echo -n "$bold_color$fg[yellow]Do you want to commit current local history file? ${reset_color}"
-        read commit    
-        if [[ -n $commit ]]; then
-            case $commit in
-                [Yy]* ) 
-                    DIR=$CWD
-                    cd $ZSH_HISTORY_PROJ && git add * && git commit -am $GIT_COMMIT_MSG
-                    echo -n "$bold_color$fg[yellow]Do you want to push to remote? ${reset_color}"
-                    read push
-                    if [[ -n $push ]]; then
-                        case $push in
-                            [Yy]* )
-                                git push                            
-                                if [[ $? != 0 ]]; then 
-                                    print_git_error_msg
-                                    cd $DIR
-                                    return
-                                fi
-                                cd $DIR
-                                ;;
-                        esac
-                    fi
+		DIR=$CWD
+		cd $ZSH_HISTORY_PROJ && git add * && git commit -am $GIT_COMMIT_MSG
+		
+		git push                            
+		if [[ $? != 0 ]]; then 
+			print_git_error_msg
+			cd $DIR
+			return
+		fi
+		cd $DIR
 
-                    if [[ $? != 0 ]]; then 
-                        print_git_error_msg
-                        cd $DIR
-                        return
-                    fi
-                    ;;
-                [Nn]* )
-                    ;;
-                * )
-                    ;;
-            esac          
-        fi
+		if [[ $? != 0 ]]; then 
+			print_git_error_msg
+			cd $DIR
+			return
+		fi
+
     fi
 }
 
