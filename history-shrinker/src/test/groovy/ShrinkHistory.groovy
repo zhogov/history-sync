@@ -8,7 +8,7 @@ class ShrinkHistory {
 
     @Test
     void test() {
-        def rawLines = new File("/home/aleksei/.zsh_history").readLines()
+        def rawLines = new File(System.getProperty("user.home") + "/.zsh_history").readLines()
 
 
         String currentLine = null
@@ -46,7 +46,7 @@ class ShrinkHistory {
             lines.add(": $entry.value:0;$entry.key")
         }
 
-        Files.write(Paths.get("/home/aleksei/.zsh_history"), lines)
+        Files.write(Paths.get(System.getProperty("user.home") + "/.zsh_history"), lines)
     }
 
     void addToSet(String currentLine) {
