@@ -71,7 +71,7 @@ function history_sync_pull() {
 
     # Pull latest history-shrinker and run it
     cd $ZSH_HISTORY_SYNC_DIRECTORY/history-shrinker
-    ./gradlew test
+    ./gradlew test --no-daemon
 
     cd $DIR
 }
