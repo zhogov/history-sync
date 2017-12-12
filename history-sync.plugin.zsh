@@ -9,6 +9,7 @@ colors
 ZSH_HISTORY_FILE=$HOME/.zsh_history
 ZSH_HISTORY_PROJ=$HOME/.zsh_history_proj
 ZSH_HISTORY_FILE_ENC=$ZSH_HISTORY_PROJ/zsh_history
+ZSH_HISTORY_SYNC_DIRECTORY=$ZSH_CUSTOM/plugins/history-sync
 GIT_COMMIT_MSG="latest $(date)"
 
 function print_git_error_msg() {
@@ -30,8 +31,20 @@ function usage() {
     echo "$bold_color$fg[red]Usage: $0 [-r <string> -r <string>...]${reset_color}" 1>&2; return; 
 }
 
+function pullLatest() {
+    DIR=$CWD
+
+    # Pull latest history-sync
+    cd $ZSH_HISTORY_SYNC_DIRECTORY
+    git pull
+
+    cd $DIR
+}
+
 # Pull current master, decrypt, and merge with .zsh_history
 function history_sync_pull() {
+    pullLatest
+
     # Backup
     cp -a $HOME/{.zsh_history,.zsh_history.backup}
     DIR=$CWD
@@ -55,13 +68,18 @@ function history_sync_pull() {
     # Merge
     cat zsh_history_decrypted >> $HOME/.zsh_history
     rm zsh_history_decrypted
-    cd $ZSH_CUSTOM/plugins/history-sync/history-shrinker
+
+    # Pull latest history-shrinker and run it
+    cd $ZSH_HISTORY_SYNC_DIRECTORY/history-shrinker
     ./gradlew test
+
     cd $DIR
 }
 
 # Encrypt and push current history to master
 function history_sync_push() {
+    pullLatest
+
     # Get option recipients
     local recipients="schogow@gmail.com"
     while getopts -r: opt; do
