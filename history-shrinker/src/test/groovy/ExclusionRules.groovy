@@ -23,10 +23,10 @@ class ExclusionRules {
             // Individual exclusions
             exclude(0, '(.*)/usr/local/bin/csshX(.*)', Pattern.DOTALL),
             exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL), // Remove commands with dummy 'asd' values
-            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc) $anything", Pattern.DOTALL),
+            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc|man|tail) $anything", Pattern.DOTALL),
             exclude(90, "$sudo(telnet|gritt) $anything", Pattern.DOTALL),
-            exclude(360, "$sudo(curl) $anything", Pattern.DOTALL), // Remove 1 year old curls
-            exclude(720, "$sudo(vi|nano|geany|meld) $anything", Pattern.DOTALL),
+            exclude(360, "$sudo(curl|find|dig) $anything", Pattern.DOTALL),
+            exclude(720, "$sudo(vi|nano|geany|meld|ssh|scp|git|apt-get|java|mvn|go|echo) $anything", Pattern.DOTALL),
 
             exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL), // Remove greps like "ps -ef | grep java"
     ]
