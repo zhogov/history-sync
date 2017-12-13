@@ -11,16 +11,22 @@ class ExclusionRules {
     static int nowSeconds = System.currentTimeMillis() / 1000
 
     static List<Tuple2<Integer, Pattern>> exclusionPatterns = [
+            // Incorrect lines
             exclude(0, '^.$'), // Single-char commands
+            exclude(0, '".*', Pattern.DOTALL), // If starts with double quote (")
             exclude(0, '\\\\.*', Pattern.DOTALL), // If starts with backslash (\)
             exclude(0, '.*\\\\', Pattern.DOTALL), // If ends with backslash (\)
             exclude(0, '(.*)[^\\\\]\\R(.*)', Pattern.DOTALL), // If there is no backslash before newline
             exclude(0, '(.*)[^\\\\] \\R(.*)', Pattern.DOTALL), // If there is no backslash before newline
+
             // Individual exclusions
             exclude(0, '(.*)/usr/local/bin/csshX(.*)', Pattern.DOTALL),
             exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL), // Remove commands with dummy 'asd' values
-            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir) $anything", Pattern.DOTALL),
-            exclude(360, "(curl) $anything", Pattern.DOTALL), // Remove 1 year old curls
+            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc) $anything", Pattern.DOTALL),
+            exclude(90, "$sudo(telnet|gritt) $anything", Pattern.DOTALL),
+            exclude(360, "$sudo(curl) $anything", Pattern.DOTALL), // Remove 1 year old curls
+            exclude(720, "$sudo(vi|nano|geany|meld) $anything", Pattern.DOTALL),
+
             exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL), // Remove greps like "ps -ef | grep java"
     ]
 
