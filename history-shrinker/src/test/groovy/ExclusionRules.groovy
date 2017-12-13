@@ -13,7 +13,8 @@ class ExclusionRules {
     static List<Tuple2<Integer, Pattern>> exclusionPatterns = [
             // Incorrect lines
             exclude(0, '^.$'), // Single-char commands
-            exclude(0, '".*', Pattern.DOTALL), // If starts with double quote (")
+            exclude(0, '".*', Pattern.DOTALL), // Starts with double quote
+            exclude(0, '''([^a-z/$~'\\.#_]).*''', Pattern.DOTALL), // Starts with something weird. Possible problem: some commands actually start with caps: "LANG=ru playonlinux"
             exclude(0, '\\\\.*', Pattern.DOTALL), // If starts with backslash (\)
             exclude(0, '.*\\\\', Pattern.DOTALL), // If ends with backslash (\)
             exclude(0, '(.*)[^\\\\]\\R(.*)', Pattern.DOTALL), // If there is no backslash before newline
