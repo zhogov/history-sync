@@ -19,6 +19,7 @@ class ExclusionRules {
             exclude(0, '(.*)/usr/local/bin/csshX(.*)', Pattern.DOTALL),
             exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL),
             exclude(30, "(cd|ls|ll|la|mkdir|grep|cat|less) $anything", Pattern.DOTALL),
+            exclude(360, "(curl) $anything", Pattern.DOTALL),
             exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL),
     ]
 
