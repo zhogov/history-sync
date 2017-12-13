@@ -5,6 +5,7 @@ class ExclusionRules {
     static def ipRegex='\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b'
     static def anything='(.*)'
     static def spaceOrQuote ='''([\\s]|["]|['])'''
+    static def sudo ='(sudo )*'
     static Pattern ipPattern = Pattern.compile("$anything$spaceOrQuote$ipRegex$spaceOrQuote$anything", Pattern.DOTALL) // Any IP address
     static List<String> whitelistedIPs = ["8.8.8.8"]
     static int nowSeconds = System.currentTimeMillis() / 1000
@@ -17,10 +18,10 @@ class ExclusionRules {
             exclude(0, '(.*)[^\\\\] \\R(.*)', Pattern.DOTALL), // If there is no backslash before newline
             // Individual exclusions
             exclude(0, '(.*)/usr/local/bin/csshX(.*)', Pattern.DOTALL),
-            exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL),
-            exclude(30, "(cd|ls|ll|la|mkdir|grep|cat|less|rm) $anything", Pattern.DOTALL),
-            exclude(360, "(curl) $anything", Pattern.DOTALL),
-            exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL),
+            exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL), // Remove commands with dummy 'asd' values
+            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir) $anything", Pattern.DOTALL),
+            exclude(360, "(curl) $anything", Pattern.DOTALL), // Remove 1 year old curls
+            exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL), // Remove greps like "ps -ef | grep java"
     ]
 
     static Tuple2<Integer, Pattern> exclude(int ageDays, String regex) {
