@@ -22,7 +22,10 @@ class ExclusionRules {
 
             // Individual exclusions
             exclude(0, '(.*)/usr/local/bin/csshX(.*)', Pattern.DOTALL),
+            exclude(0, 'ssh-keygen -f ".*', Pattern.DOTALL),
             exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL), // Remove commands with dummy 'asd' values
+
+            // Command/retention based
             exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc|man|tail) $anything", Pattern.DOTALL),
             exclude(90, "$sudo(telnet|dig|ping|gritt) $anything", Pattern.DOTALL),
             exclude(360, "$sudo(curl|find|dd|mvn|meld) $anything", Pattern.DOTALL),
