@@ -26,10 +26,10 @@ class ExclusionRules {
             exclude(30, "$anything${spaceOrQuote}(asd)+$spaceOrQuote$anything", Pattern.DOTALL), // Remove commands with dummy 'asd' values
 
             // Command/retention based
-            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc|man|tail) $anything", Pattern.DOTALL),
-            exclude(90, "$sudo(telnet|dig|ping|gritt) $anything", Pattern.DOTALL),
-            exclude(360, "$sudo(curl|find|dd|mvn|meld) $anything", Pattern.DOTALL),
-            exclude(720, "$sudo(vi|nano|geany|gedit|ssh|scp|git|apt-get|aptitude|java|go|echo|for|chmod|chown) $anything", Pattern.DOTALL),
+            exclude(30, "$sudo(cd|ls|ll|la|mkdir|grep|cat|less|rm|touch|rmdir|cp|mv|wc|man|tail|youtube-dl) $anything", Pattern.DOTALL),
+            exclude(90, "$sudo(telnet|dig|ping|gritt|ifconfig|id|pkill) $anything", Pattern.DOTALL),
+            exclude(360, "$sudo(curl|find|dd|mvn|meld|docker|gr|./gradlew|watch|cut|sort|zip|unzip|set|xrandr) $anything", Pattern.DOTALL),
+            exclude(720, "$sudo(vi|nano|geany|gedit|subl|ssh|scp|git|svn|apt-get|aptitude|java|go|echo|for|chmod|chown|while|aws|vault|ansible|python) $anything", Pattern.DOTALL),
 
             exclude(30, "$anything(\\|)(\\s)*(grep )$anything", Pattern.DOTALL), // Remove greps like "ps -ef | grep java"
     ]
